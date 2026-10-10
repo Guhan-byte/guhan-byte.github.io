@@ -32,5 +32,7 @@ jobs:
         with:
           folder: _site
           branch: gh-pages
-          # keep the PR previews that live alongside the site
-          clean-exclude: pr-preview/
+          # keep the PR previews that live alongside the site and its templates
+          clean-exclude: |
+            pr-preview/
+            templates/*/pr-preview/
