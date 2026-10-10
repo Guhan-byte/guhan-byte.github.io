@@ -37,3 +37,21 @@ if ('IntersectionObserver' in window) {
 }
 
 document.getElementById('year').textContent = new Date().getFullYear();
+
+// Contact form (FormSubmit): come back to this page after sending, and say thanks.
+const form = document.getElementById('contact-form');
+form.elements._next.value = location.origin + location.pathname + '?sent=1#contact';
+if (new URLSearchParams(location.search).has('sent')) {
+  document.getElementById('form-success').hidden = false;
+}
+form.addEventListener('submit', () => {
+  const button = form.querySelector('button[type="submit"]');
+  button.disabled = true;
+  button.textContent = 'Sending…';
+});
+// Re-enable the button if the visitor comes back with the browser's Back button.
+window.addEventListener('pageshow', () => {
+  const button = form.querySelector('button[type="submit"]');
+  button.disabled = false;
+  button.textContent = 'Send message';
+});
