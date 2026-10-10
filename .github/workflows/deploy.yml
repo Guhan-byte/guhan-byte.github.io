@@ -1,0 +1,36 @@
+# Publishes the live site from main to the gh-pages branch.
+# GitHub Pages must be set to "Deploy from a branch: gh-pages / (root)".
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Shared with pr-preview.yml so the two never push to gh-pages at the same time.
+concurrency:
+  group: gh-pages-branch
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Collect site files
+        run: |
+          mkdir _site
+          rsync -a --exclude .git --exclude .github --exclude _site ./ _site/
+          touch _site/.nojekyll
+
+      - name: Publish to gh-pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: _site
+          branch: gh-pages
+          # keep the PR previews that live alongside the site
+          clean-exclude: pr-preview/
