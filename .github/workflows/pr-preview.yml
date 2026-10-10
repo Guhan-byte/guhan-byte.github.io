@@ -32,3 +32,5 @@ jobs:
           source-dir: _site
           preview-branch: gh-pages
           umbrella-dir: pr-preview
+          # user site: served from the domain root, not /<repo>/
+          pages-base-url: robbytee.github.io
